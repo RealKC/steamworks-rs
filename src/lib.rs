@@ -5,6 +5,7 @@ extern crate bitflags;
 #[macro_use]
 extern crate lazy_static;
 
+use inventory::Inventory;
 #[cfg(feature = "raw-bindings")]
 pub use steamworks_sys as sys;
 #[cfg(not(feature = "raw-bindings"))]
@@ -26,6 +27,7 @@ pub use crate::callback::*;
 pub use crate::error::*;
 pub use crate::friends::*;
 pub use crate::input::*;
+pub use crate::inventory::*;
 pub use crate::matchmaking::*;
 pub use crate::networking::*;
 pub use crate::remote_storage::*;
@@ -40,6 +42,7 @@ mod callback;
 mod error;
 mod friends;
 mod input;
+mod inventory;
 mod matchmaking;
 mod networking;
 pub mod networking_messages;
@@ -334,6 +337,17 @@ impl<Manager> Client<Manager> {
             Input {
                 input,
                 _inner: self.inner.clone(),
+            }
+        }
+    }
+
+    pub fn inventory(&self) -> Inventory<Manager> {
+        unsafe {
+            let inventory = sys::SteamAPI_SteamInventory_v003();
+            debug_assert!(!inventory.is_null());
+            Inventory {
+                inventory,
+                inner: self.inner.clone(),
             }
         }
     }

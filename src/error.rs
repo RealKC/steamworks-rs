@@ -382,6 +382,9 @@ pub enum SteamError {
     /// max network send size
     #[error("WG network send size exceeded")]
     WGNetworkSendExceeded,
+
+    #[error("item definitions are not loaded")]
+    ItemDefinitionsNotLoaded,
 }
 
 impl From<sys::EResult> for SteamError {
